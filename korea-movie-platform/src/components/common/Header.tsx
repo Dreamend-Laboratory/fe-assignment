@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Film } from 'lucide-react';
+import { Menu, Film, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MobileMenu } from './MobileMenu';
 
 const navItems = [
   { path: '/', label: '박스오피스', icon: Film },
+  { path: '/search', label: '영화 검색', icon: Search },
 ];
 
 export function Header() {
