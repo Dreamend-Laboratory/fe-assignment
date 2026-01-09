@@ -42,11 +42,11 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
 
       {/* Menu Panel */}
       <div className="fixed right-0 top-0 h-full w-72 bg-white shadow-2xl animate-in slide-in-from-right duration-300">
-        <div className="flex items-center justify-between p-5 border-b">
+        <div className="flex items-center justify-between p-4 border-b">
           <span className="font-bold text-lg gradient-text">메뉴</span>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+            className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded-xl transition-colors"
             aria-label="메뉴 닫기"
           >
             <X className="h-5 w-5" />
