@@ -2,6 +2,8 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '@/layouts/MainLayout';
 import { BoxOfficePage } from '@/pages/BoxOfficePage';
 import { SearchPage } from '@/pages/SearchPage';
+import { MovieDetailPage } from '@/pages/MovieDetailPage';
+import { FavoritesPage } from '@/pages/FavoritesPage';
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +17,14 @@ export const router = createBrowserRouter([
       {
         path: 'search',
         element: <SearchPage />,
+      },
+      {
+        path: 'movie/:movieCd',
+        element: <MovieDetailPage />,
+      },
+      {
+        path: 'favorites',
+        element: <FavoritesPage />,
       },
       {
         path: '*',
