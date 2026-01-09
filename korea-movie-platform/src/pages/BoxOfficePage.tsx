@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { format, subDays } from 'date-fns';
+import { format, subDays, previousSunday, parse } from 'date-fns';
 import { Calendar, TrendingUp } from 'lucide-react';
 import { kobisApi } from '@/api/kobis';
 import type { DailyBoxOfficeItem } from '@/api/types';
@@ -40,10 +40,18 @@ export function BoxOfficePage() {
 
       if (type === 'daily') {
         data = await kobisApi.getDailyBoxOffice(date);
-      } else if (type === 'weekly') {
-        data = await kobisApi.getWeeklyBoxOffice(date, '0');
       } else {
-        data = await kobisApi.getWeeklyBoxOffice(date, '1');
+        // 주간/주말 박스오피스는 해당 주가 끝난 후에만 데이터 제공
+        // 선택한 날짜 기준 지난 일요일로 조정
+        const selectedDate = parse(date, 'yyyyMMdd', new Date());
+        const lastSunday = previousSunday(selectedDate);
+        const weeklyDate = format(lastSunday, 'yyyyMMdd');
+
+        if (type === 'weekly') {
+          data = await kobisApi.getWeeklyBoxOffice(weeklyDate, '0');
+        } else {
+          data = await kobisApi.getWeeklyBoxOffice(weeklyDate, '1');
+        }
       }
 
       setMovies(data);
