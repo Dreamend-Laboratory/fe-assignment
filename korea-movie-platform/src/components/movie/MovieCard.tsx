@@ -87,25 +87,25 @@ export function MovieCard({
           </div>
 
           {/* 영화 제목 (카드 중앙) */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-            <div className="w-12 h-0.5 bg-white/40 rounded-full mb-4" />
-            <h3 className="text-white text-center font-bold text-lg md:text-xl leading-tight line-clamp-3 px-2"
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-3 sm:p-4">
+            <div className="w-8 sm:w-12 h-0.5 bg-white/40 rounded-full mb-2 sm:mb-4" />
+            <h3 className="text-white text-center font-bold text-sm sm:text-lg md:text-xl leading-tight line-clamp-3 px-1 sm:px-2"
                 style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3)' }}>
               {movieNm}
             </h3>
-            <div className="w-12 h-0.5 bg-white/40 rounded-full mt-4" />
+            <div className="w-8 sm:w-12 h-0.5 bg-white/40 rounded-full mt-2 sm:mt-4" />
           </div>
 
           {/* 하단 연도/장르 표시 */}
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <div className="flex items-center justify-center gap-2">
+          <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
               {prdtYear && (
-                <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium">
+                <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs font-medium">
                   {prdtYear}
                 </span>
               )}
               {genreAlt && (
-                <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium line-clamp-1 max-w-[100px]">
+                <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs font-medium line-clamp-1 max-w-[80px] sm:max-w-[100px]">
                   {genreAlt.split(',')[0]}
                 </span>
               )}
@@ -136,7 +136,7 @@ export function MovieCard({
           {showDeleteButton && (
             <button
               onClick={handleDeleteClick}
-              className="absolute top-3 right-3 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full text-rose-500 hover:bg-white hover:text-rose-600 transition-all shadow-md hover:scale-110"
+              className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full text-rose-500 hover:bg-white hover:text-rose-600 active:scale-95 transition-all shadow-md"
               aria-label="삭제"
             >
               <X className="h-4 w-4" />
@@ -146,11 +146,11 @@ export function MovieCard({
         </div>
 
         {/* 영화 정보 */}
-        <div className="mt-4 space-y-1.5">
-          <h3 className="font-semibold text-foreground text-sm line-clamp-1 group-hover:text-indigo-600 transition-colors">
+        <div className="mt-3 sm:mt-4 space-y-1 sm:space-y-1.5">
+          <h3 className="font-semibold text-foreground text-xs sm:text-sm line-clamp-1 group-hover:text-indigo-600 transition-colors">
             {movieNm}
           </h3>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] sm:text-xs text-muted-foreground line-clamp-1">
             {genreAlt && <span>{genreAlt}</span>}
             {genreAlt && prdtYear && <span className="mx-1">·</span>}
             {prdtYear && <span>{prdtYear}</span>}
@@ -158,16 +158,16 @@ export function MovieCard({
 
           {/* 박스오피스 관객수 정보 */}
           {(audiCnt || audiAcc) && (
-            <div className="flex gap-3 text-xs">
+            <div className="flex flex-wrap gap-2 sm:gap-3 text-[10px] sm:text-xs">
               {audiCnt && (
                 <span className="flex items-center gap-1">
-                  <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded font-medium">오늘</span>
+                  <span className="px-1 sm:px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded font-medium">오늘</span>
                   <span className="text-foreground font-medium">{formatAudience(audiCnt)}</span>
                 </span>
               )}
               {audiAcc && (
                 <span className="flex items-center gap-1">
-                  <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded font-medium">누적</span>
+                  <span className="px-1 sm:px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded font-medium">누적</span>
                   <span className="text-foreground font-medium">{formatAudience(audiAcc)}</span>
                 </span>
               )}
@@ -176,7 +176,7 @@ export function MovieCard({
 
           {/* 추가 날짜 (즐겨찾기용) */}
           {addedAt && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
               {new Date(addedAt).toLocaleDateString('ko-KR')} 추가
             </p>
           )}

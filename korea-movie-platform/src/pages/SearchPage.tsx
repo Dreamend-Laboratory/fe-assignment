@@ -142,70 +142,72 @@ export function SearchPage() {
       <div className="bg-white rounded-2xl shadow-sm border p-4 md:p-6">
         <form onSubmit={handleSearch} className="space-y-4">
           {/* 검색 입력 */}
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="영화명을 입력하세요"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-12 h-12 text-base bg-gray-50 border-0 focus:bg-white transition-colors rounded-xl"
+                className="pl-10 sm:pl-12 h-11 sm:h-12 text-sm sm:text-base bg-gray-50 border-0 focus:bg-white transition-colors rounded-xl"
               />
             </div>
             <Button
               type="submit"
-              className="h-12 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-xl shadow-md"
+              className="h-11 sm:h-12 px-4 sm:px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-xl shadow-md text-sm sm:text-base"
             >
               검색
             </Button>
           </div>
 
           {/* 필터 */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Filter className="h-4 w-4" />
               <span>필터</span>
             </div>
-            <Select value={year} onValueChange={setYear}>
-              <SelectTrigger className="w-28 bg-gray-50 border-0 rounded-lg">
-                <SelectValue placeholder="연도" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">전체 연도</SelectItem>
-                {years.map((y) => (
-                  <SelectItem key={y} value={y.toString()}>
-                    {y}년
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="grid grid-cols-3 gap-2">
+              <Select value={year} onValueChange={setYear}>
+                <SelectTrigger className="w-full bg-gray-50 border-0 rounded-lg text-sm">
+                  <SelectValue placeholder="연도" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">전체 연도</SelectItem>
+                  {years.map((y) => (
+                    <SelectItem key={y} value={y.toString()}>
+                      {y}년
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <Select value={movieType} onValueChange={setMovieType}>
-              <SelectTrigger className="w-28 bg-gray-50 border-0 rounded-lg">
-                <SelectValue placeholder="유형" />
-              </SelectTrigger>
-              <SelectContent>
-                {movieTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <Select value={movieType} onValueChange={setMovieType}>
+                <SelectTrigger className="w-full bg-gray-50 border-0 rounded-lg text-sm">
+                  <SelectValue placeholder="유형" />
+                </SelectTrigger>
+                <SelectContent>
+                  {movieTypes.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <Select value={nation} onValueChange={setNation}>
-              <SelectTrigger className="w-28 bg-gray-50 border-0 rounded-lg">
-                <SelectValue placeholder="국가" />
-              </SelectTrigger>
-              <SelectContent>
-                {nations.map((n) => (
-                  <SelectItem key={n.value} value={n.value}>
-                    {n.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <Select value={nation} onValueChange={setNation}>
+                <SelectTrigger className="w-full bg-gray-50 border-0 rounded-lg text-sm">
+                  <SelectValue placeholder="국가" />
+                </SelectTrigger>
+                <SelectContent>
+                  {nations.map((n) => (
+                    <SelectItem key={n.value} value={n.value}>
+                      {n.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </form>
       </div>
@@ -278,6 +280,7 @@ function Pagination({
   onPageChange: (page: number) => void;
 }) {
   const maxVisiblePages = 5;
+  const mobileMaxPages = 3;
   const startPage = Math.max(
     1,
     Math.min(currentPage - Math.floor(maxVisiblePages / 2), totalPages - maxVisiblePages + 1)
@@ -289,66 +292,97 @@ function Pagination({
     (_, i) => startPage + i
   );
 
+  // 모바일용 페이지 목록 (3개만)
+  const mobileStartPage = Math.max(
+    1,
+    Math.min(currentPage - Math.floor(mobileMaxPages / 2), totalPages - mobileMaxPages + 1)
+  );
+  const mobileEndPage = Math.min(totalPages, mobileStartPage + mobileMaxPages - 1);
+  const mobilePages = Array.from(
+    { length: mobileEndPage - mobileStartPage + 1 },
+    (_, i) => mobileStartPage + i
+  );
+
   return (
-    <div className="flex justify-center items-center gap-2 mt-10">
+    <div className="flex justify-center items-center gap-1 sm:gap-2 mt-8 sm:mt-10">
       <Button
         variant="outline"
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="rounded-lg"
+        className="rounded-lg px-2 sm:px-3 text-xs sm:text-sm"
       >
         이전
       </Button>
 
-      {startPage > 1 && (
-        <>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onPageChange(1)}
-            className="rounded-lg"
-          >
-            1
-          </Button>
-          {startPage > 2 && <span className="px-2 text-muted-foreground">...</span>}
-        </>
-      )}
+      {/* 데스크톱 페이지네이션 */}
+      <div className="hidden sm:flex items-center gap-2">
+        {startPage > 1 && (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onPageChange(1)}
+              className="rounded-lg"
+            >
+              1
+            </Button>
+            {startPage > 2 && <span className="px-2 text-muted-foreground">...</span>}
+          </>
+        )}
 
-      {pages.map((pageNum) => (
-        <Button
-          key={pageNum}
-          variant={pageNum === currentPage ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => onPageChange(pageNum)}
-          className={pageNum === currentPage
-            ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
-            : 'rounded-lg'}
-        >
-          {pageNum}
-        </Button>
-      ))}
-
-      {endPage < totalPages && (
-        <>
-          {endPage < totalPages - 1 && <span className="px-2 text-muted-foreground">...</span>}
+        {pages.map((pageNum) => (
           <Button
-            variant="outline"
+            key={pageNum}
+            variant={pageNum === currentPage ? 'default' : 'outline'}
             size="sm"
-            onClick={() => onPageChange(totalPages)}
-            className="rounded-lg"
+            onClick={() => onPageChange(pageNum)}
+            className={pageNum === currentPage
+              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
+              : 'rounded-lg'}
           >
-            {totalPages}
+            {pageNum}
           </Button>
-        </>
-      )}
+        ))}
+
+        {endPage < totalPages && (
+          <>
+            {endPage < totalPages - 1 && <span className="px-2 text-muted-foreground">...</span>}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onPageChange(totalPages)}
+              className="rounded-lg"
+            >
+              {totalPages}
+            </Button>
+          </>
+        )}
+      </div>
+
+      {/* 모바일 페이지네이션 */}
+      <div className="flex sm:hidden items-center gap-1">
+        {mobilePages.map((pageNum) => (
+          <Button
+            key={pageNum}
+            variant={pageNum === currentPage ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => onPageChange(pageNum)}
+            className={`w-8 h-8 p-0 text-xs ${pageNum === currentPage
+              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
+              : 'rounded-lg'}`}
+          >
+            {pageNum}
+          </Button>
+        ))}
+      </div>
 
       <Button
         variant="outline"
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="rounded-lg"
+        className="rounded-lg px-2 sm:px-3 text-xs sm:text-sm"
       >
         다음
       </Button>

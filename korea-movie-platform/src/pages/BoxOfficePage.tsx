@@ -106,56 +106,63 @@ export function BoxOfficePage() {
 
       {/* 필터 카드 */}
       <div className="bg-white rounded-2xl shadow-sm border p-4 md:p-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          {/* 날짜 선택 */}
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-100 rounded-xl">
-              <Calendar className="h-5 w-5 text-indigo-600" />
+        <div className="flex flex-col gap-4">
+          {/* 상단: 날짜 선택 + 데스크톱 탭 */}
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
+            {/* 날짜 선택 */}
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="p-2 bg-indigo-100 rounded-xl flex-shrink-0">
+                <Calendar className="h-5 w-5 text-indigo-600" />
+              </div>
+              <div className="flex-1 sm:flex-initial">
+                <label className="text-xs text-muted-foreground block mb-1">조회 날짜</label>
+                <Input
+                  type="date"
+                  value={dateInputValue}
+                  onChange={handleDateChange}
+                  max={maxDate}
+                  className="w-full sm:w-44 border-0 bg-gray-50 focus:bg-white transition-colors"
+                />
+              </div>
             </div>
-            <div>
-              <label className="text-xs text-muted-foreground block mb-1">조회 날짜</label>
-              <Input
-                type="date"
-                value={dateInputValue}
-                onChange={handleDateChange}
-                max={maxDate}
-                className="w-44 border-0 bg-gray-50 focus:bg-white transition-colors"
-              />
-            </div>
+
+            {/* 타입 선택 (데스크톱용 Tabs) */}
+            <Tabs
+              value={type}
+              onValueChange={handleTypeChange}
+              className="hidden sm:block"
+            >
+              <TabsList className="bg-gray-100">
+                <TabsTrigger value="daily" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
+                  일별
+                </TabsTrigger>
+                <TabsTrigger value="weekly" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
+                  주간
+                </TabsTrigger>
+                <TabsTrigger value="weekend" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
+                  주말
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
-          {/* 타입 선택 (모바일용 Select) */}
-          <div className="sm:hidden w-full">
-            <Select value={type} onValueChange={handleTypeChange}>
-              <SelectTrigger className="w-full bg-gray-50">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="daily">일별</SelectItem>
-                <SelectItem value="weekly">주간</SelectItem>
-                <SelectItem value="weekend">주말</SelectItem>
-              </SelectContent>
-            </Select>
+          {/* 모바일 타입 선택 버튼 */}
+          <div className="sm:hidden grid grid-cols-3 gap-2">
+            {(['daily', 'weekly', 'weekend'] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => handleTypeChange(t)}
+                className={cn(
+                  'py-2.5 px-3 rounded-xl text-sm font-medium transition-all',
+                  type === t
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                )}
+              >
+                {t === 'daily' ? '일별' : t === 'weekly' ? '주간' : '주말'}
+              </button>
+            ))}
           </div>
-
-          {/* 타입 선택 (데스크톱용 Tabs) */}
-          <Tabs
-            value={type}
-            onValueChange={handleTypeChange}
-            className="hidden sm:block"
-          >
-            <TabsList className="bg-gray-100">
-              <TabsTrigger value="daily" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
-                일별
-              </TabsTrigger>
-              <TabsTrigger value="weekly" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
-                주간
-              </TabsTrigger>
-              <TabsTrigger value="weekend" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
-                주말
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
       </div>
 
@@ -211,12 +218,12 @@ function MobileMovieCard({
   return (
     <a
       href={`/movie/${movie.movieCd}`}
-      className="flex gap-4 p-4 rounded-2xl bg-white shadow-sm border hover:shadow-md transition-shadow"
+      className="flex gap-3 p-3 rounded-2xl bg-white shadow-sm border active:bg-gray-50 transition-colors"
     >
       {/* 포스터 */}
       <div
         className={cn(
-          'relative flex-shrink-0 w-20 h-28 rounded-xl overflow-hidden shadow-md',
+          'relative flex-shrink-0 w-[72px] h-[100px] rounded-xl overflow-hidden shadow-md',
           getGradientByIndex(gradientIndex)
         )}
       >
@@ -224,37 +231,37 @@ function MobileMovieCard({
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
 
         {/* 제목 */}
-        <div className="absolute inset-0 flex items-center justify-center p-2">
-          <span className="text-white text-xs text-center font-bold line-clamp-3"
+        <div className="absolute inset-0 flex items-center justify-center p-1.5">
+          <span className="text-white text-[10px] text-center font-bold line-clamp-3"
                 style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
             {movie.movieNm}
           </span>
         </div>
 
         {/* 순위 배지 */}
-        <div className="absolute top-1.5 left-1.5">
-          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/95 text-xs font-bold text-gray-800 shadow">
+        <div className="absolute top-1 left-1">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/95 text-[10px] font-bold text-gray-800 shadow">
             {movie.rank}
           </span>
         </div>
       </div>
 
       {/* 정보 */}
-      <div className="flex-1 min-w-0 py-1">
-        <h3 className="font-semibold text-foreground line-clamp-1">
+      <div className="flex-1 min-w-0 flex flex-col justify-center">
+        <h3 className="font-semibold text-sm text-foreground line-clamp-1">
           {movie.movieNm}
         </h3>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs text-muted-foreground mt-0.5">
           {formatDateWithSpaces(movie.openDt)} 개봉
         </p>
-        <div className="flex gap-3 mt-3 text-xs">
+        <div className="flex flex-wrap gap-2 mt-2 text-xs">
           <span className="flex items-center gap-1">
-            <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded font-medium">오늘</span>
-            <span className="font-medium">{parseInt(movie.audiCnt).toLocaleString()}</span>
+            <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded text-[10px] font-medium">오늘</span>
+            <span className="font-medium text-xs">{parseInt(movie.audiCnt).toLocaleString()}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded font-medium">누적</span>
-            <span className="font-medium">{parseInt(movie.audiAcc).toLocaleString()}</span>
+            <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded text-[10px] font-medium">누적</span>
+            <span className="font-medium text-xs">{parseInt(movie.audiAcc).toLocaleString()}</span>
           </span>
         </div>
       </div>

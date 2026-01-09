@@ -130,10 +130,10 @@ export function MovieDetailPage() {
       </div>
 
       {/* 메인 컨텐츠 카드 */}
-      <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
-        <div className="flex flex-col md:flex-row gap-8">
+      <div className="bg-white rounded-2xl shadow-sm border p-4 sm:p-6 md:p-8">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
           {/* 포스터 */}
-          <div className="md:w-80 flex-shrink-0">
+          <div className="w-full max-w-[280px] mx-auto md:mx-0 md:w-72 lg:w-80 flex-shrink-0">
             <div
               className={cn(
                 'relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl',
@@ -228,7 +228,7 @@ export function MovieDetailPage() {
             </div>
 
             {/* 상세 정보 그리드 */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <InfoItem
                 icon={<Calendar className="h-4 w-4" />}
                 label="개봉일"
@@ -291,20 +291,20 @@ export function MovieDetailPage() {
 
       {/* 출연진 */}
       {movie.actors.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border p-4 sm:p-6 md:p-8">
+          <div className="flex items-center gap-3 mb-4 sm:mb-6">
             <div className="p-2 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl">
               <Users className="h-5 w-5 text-white" />
             </div>
-            <h2 className="text-xl font-bold text-foreground">출연진</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-foreground">출연진</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {movie.actors.slice(0, 8).map((actor, index) => (
               <div
                 key={`${actor.peopleNm}-${index}`}
-                className="flex items-center gap-4 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 active:bg-gray-100 transition-colors"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-white font-bold shadow-md">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-white font-bold shadow-md text-sm sm:text-base flex-shrink-0">
                   {actor.peopleNm.charAt(0)}
                 </div>
                 <div className="min-w-0 flex-1">
