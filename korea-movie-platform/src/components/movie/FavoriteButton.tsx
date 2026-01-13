@@ -1,4 +1,4 @@
-import { Star, Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface FavoriteButtonProps {
@@ -36,19 +36,12 @@ export function FavoriteButton({
       className={cn(
         'rounded-full transition-all hover:scale-110',
         buttonSizeClasses[size],
-        isFavorite
-          ? 'text-yellow-500 hover:text-yellow-600'
-          : 'text-gray-400 hover:text-gray-500',
+        isFavorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-gray-400 hover:text-gray-500',
         className
       )}
       aria-label={isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
     >
-      <Icon
-        className={cn(
-          sizeClasses[size],
-          isFavorite && 'fill-current'
-        )}
-      />
+      <Icon className={cn(sizeClasses[size], isFavorite && 'fill-current')} />
     </button>
   );
 }

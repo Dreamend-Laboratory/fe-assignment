@@ -1,5 +1,5 @@
+import { Film, Heart, Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { Film, Search, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -23,29 +23,16 @@ export function BottomNav() {
               to={item.path}
               className={cn(
                 'flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors',
-                isActive
-                  ? 'text-indigo-600'
-                  : 'text-gray-400 active:text-gray-600'
+                isActive ? 'text-indigo-600' : 'text-gray-400 active:text-gray-600'
               )}
             >
-              <div
-                className={cn(
-                  'p-1.5 rounded-xl transition-all',
-                  isActive && 'bg-indigo-100'
-                )}
-              >
+              <div className={cn('p-1.5 rounded-xl transition-all', isActive && 'bg-indigo-100')}>
                 <Icon
-                  className={cn(
-                    'h-5 w-5 transition-transform',
-                    isActive && 'scale-110'
-                  )}
+                  className={cn('h-5 w-5 transition-transform', isActive && 'scale-110')}
                   strokeWidth={isActive ? 2.5 : 2}
                 />
               </div>
-              <span className={cn(
-                'text-[10px] font-medium',
-                isActive && 'font-semibold'
-              )}>
+              <span className={cn('text-[10px] font-medium', isActive && 'font-semibold')}>
                 {item.label}
               </span>
             </Link>

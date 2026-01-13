@@ -2,10 +2,10 @@ import { apiClient } from './client';
 import type {
   BoxOfficeResponse,
   DailyBoxOfficeItem,
-  MovieListResponse,
-  MovieListItem,
-  MovieDetailResponse,
   MovieDetail,
+  MovieDetailResponse,
+  MovieListItem,
+  MovieListResponse,
   MovieSearchParams,
 } from './types';
 

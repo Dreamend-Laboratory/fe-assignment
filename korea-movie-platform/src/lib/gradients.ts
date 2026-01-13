@@ -14,9 +14,7 @@ export const gradients = [
  * 영화 코드 기반으로 일관된 그라디언트 인덱스 반환
  */
 export const getGradientIndex = (movieCd: string): number => {
-  const hash = movieCd
-    .split('')
-    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const hash = movieCd.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return hash % gradients.length;
 };
 

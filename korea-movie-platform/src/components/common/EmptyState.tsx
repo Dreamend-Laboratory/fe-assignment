@@ -1,6 +1,6 @@
 import { Film, Search, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 type EmptyStateVariant = 'search' | 'favorites' | 'default';
 
@@ -44,12 +44,7 @@ export function EmptyState({
   const defaultMessage = defaultMessages[variant];
 
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center py-16 text-center',
-        className
-      )}
-    >
+    <div className={cn('flex flex-col items-center justify-center py-16 text-center', className)}>
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted mb-4">
         <Icon className="h-8 w-8 text-muted-foreground" />
       </div>

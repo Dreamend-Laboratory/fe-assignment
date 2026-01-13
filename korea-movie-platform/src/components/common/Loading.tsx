@@ -15,18 +15,9 @@ export function Loading({ message, className, size = 'md' }: LoadingProps) {
   };
 
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center py-12',
-        className
-      )}
-    >
-      <Loader2
-        className={cn('animate-spin text-primary-600', sizeClasses[size])}
-      />
-      {message && (
-        <p className="mt-4 text-sm text-muted-foreground">{message}</p>
-      )}
+    <div className={cn('flex flex-col items-center justify-center py-12', className)}>
+      <Loader2 className={cn('animate-spin text-primary-600', sizeClasses[size])} />
+      {message && <p className="mt-4 text-sm text-muted-foreground">{message}</p>}
     </div>
   );
 }

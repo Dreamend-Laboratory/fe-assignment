@@ -1,9 +1,9 @@
+import { Film, Star, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { X, Star, Film } from 'lucide-react';
-import { cn, formatAudience } from '@/lib/utils';
 import { getGradient, getGradientByIndex } from '@/lib/gradients';
-import { RankBadge } from './RankBadge';
+import { cn, formatAudience } from '@/lib/utils';
 import { FavoriteButton } from './FavoriteButton';
+import { RankBadge } from './RankBadge';
 
 interface MovieCardProps {
   movieCd: string;
@@ -12,7 +12,7 @@ interface MovieCardProps {
   prdtYear?: string;
   openDt?: string;
   directors?: string;
-  
+
   // 박스오피스용
   rank?: number;
   rankInten?: number;
@@ -56,9 +56,7 @@ export function MovieCard({
   className,
 }: MovieCardProps) {
   const gradientClass =
-    gradientIndex !== undefined
-      ? getGradientByIndex(gradientIndex)
-      : getGradient(movieCd);
+    gradientIndex !== undefined ? getGradientByIndex(gradientIndex) : getGradient(movieCd);
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -73,10 +71,7 @@ export function MovieCard({
   };
 
   return (
-    <Link
-      to={`/movie/${movieCd}`}
-      className={cn('group block', className)}
-    >
+    <Link to={`/movie/${movieCd}`} className={cn('group block', className)}>
       <div className="card-hover">
         {/* 그라디언트 카드 */}
         <div
@@ -87,9 +82,12 @@ export function MovieCard({
         >
           {/* 패턴 오버레이 */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }} />
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+              }}
+            />
           </div>
 
           {/* 어두운 오버레이 */}
@@ -106,8 +104,10 @@ export function MovieCard({
           {/* 영화 제목 (카드 중앙) */}
           <div className="absolute inset-0 flex flex-col items-center justify-center p-3 sm:p-4">
             <div className="w-8 sm:w-12 h-0.5 bg-white/40 rounded-full mb-2 sm:mb-4" />
-            <h3 className="text-white text-center font-bold text-sm sm:text-lg md:text-xl leading-tight line-clamp-3 px-1 sm:px-2"
-                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3)' }}>
+            <h3
+              className="text-white text-center font-bold text-sm sm:text-lg md:text-xl leading-tight line-clamp-3 px-1 sm:px-2"
+              style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3)' }}
+            >
               {movieNm}
             </h3>
             <div className="w-8 sm:w-12 h-0.5 bg-white/40 rounded-full mt-2 sm:mt-4" />
@@ -132,11 +132,7 @@ export function MovieCard({
           {/* 순위 배지 (좌상단) */}
           {rank !== undefined && rankInten !== undefined && rankOldAndNew && (
             <div className="absolute top-3 left-3 z-10">
-              <RankBadge
-                rank={rank}
-                rankInten={rankInten}
-                rankOldAndNew={rankOldAndNew}
-              />
+              <RankBadge rank={rank} rankInten={rankInten} rankOldAndNew={rankOldAndNew} />
             </div>
           )}
 
@@ -171,7 +167,6 @@ export function MovieCard({
               />
             </div>
           )}
-
         </div>
 
         {/* 영화 정보 */}
@@ -190,13 +185,17 @@ export function MovieCard({
             <div className="flex flex-wrap gap-2 sm:gap-3 text-[10px] sm:text-xs">
               {audiCnt && (
                 <span className="flex items-center gap-1">
-                  <span className="px-1 sm:px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded font-medium">오늘</span>
+                  <span className="px-1 sm:px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded font-medium">
+                    오늘
+                  </span>
                   <span className="text-foreground font-medium">{formatAudience(audiCnt)}</span>
                 </span>
               )}
               {audiAcc && (
                 <span className="flex items-center gap-1">
-                  <span className="px-1 sm:px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded font-medium">누적</span>
+                  <span className="px-1 sm:px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded font-medium">
+                    누적
+                  </span>
                   <span className="text-foreground font-medium">{formatAudience(audiAcc)}</span>
                 </span>
               )}

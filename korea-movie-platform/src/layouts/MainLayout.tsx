@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { Header, BottomNav } from '@/components/common';
+import { BottomNav, Header } from '@/components/common';
 
 export function MainLayout() {
   return (

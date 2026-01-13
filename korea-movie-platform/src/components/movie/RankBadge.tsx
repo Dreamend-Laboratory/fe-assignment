@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Minus, Sparkles } from 'lucide-react';
+import { Minus, Sparkles, TrendingDown, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RankBadgeProps {
@@ -8,12 +8,7 @@ interface RankBadgeProps {
   className?: string;
 }
 
-export function RankBadge({
-  rank,
-  rankInten,
-  rankOldAndNew,
-  className,
-}: RankBadgeProps) {
+export function RankBadge({ rank, rankInten, rankOldAndNew, className }: RankBadgeProps) {
   const isNew = rankOldAndNew === 'NEW';
   const isUp = rankInten > 0;
   const isDown = rankInten < 0;

@@ -1,11 +1,11 @@
-import { Star, Film, X, Heart, Trash2 } from 'lucide-react';
+import { Film, Heart, Star, Trash2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useFavorites } from '@/hooks/useFavorites';
-import { MovieCard } from '@/components/movie';
 import { EmptyState } from '@/components/common';
+import { MovieCard } from '@/components/movie';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { useFavorites } from '@/hooks/useFavorites';
 import { getGradientByIndex } from '@/lib/gradients';
+import { cn } from '@/lib/utils';
 
 export function FavoritesPage() {
   const { favorites, count, genres, removeFavorite, clearAll } = useFavorites();
@@ -25,7 +25,9 @@ export function FavoritesPage() {
             <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">내 즐겨찾기</h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+              내 즐겨찾기
+            </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-0.5 sm:mt-1">
               저장한 영화 목록을 확인하세요
             </p>
@@ -156,8 +158,10 @@ function MobileFavoriteCard({
 
         {/* 제목 */}
         <div className="absolute inset-0 flex items-center justify-center p-1.5">
-          <span className="text-white text-[10px] text-center font-bold line-clamp-3"
-                style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
+          <span
+            className="text-white text-[10px] text-center font-bold line-clamp-3"
+            style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
+          >
             {movie.movieNm}
           </span>
         </div>
@@ -172,9 +176,7 @@ function MobileFavoriteCard({
 
       {/* 정보 */}
       <div className="flex-1 min-w-0 flex flex-col justify-center">
-        <h3 className="font-semibold text-sm text-foreground line-clamp-1">
-          {movie.movieNm}
-        </h3>
+        <h3 className="font-semibold text-sm text-foreground line-clamp-1">{movie.movieNm}</h3>
         <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
           {movie.genreAlt && <span>{movie.genreAlt}</span>}
           {movie.genreAlt && movie.prdtYear && <span className="mx-1">·</span>}

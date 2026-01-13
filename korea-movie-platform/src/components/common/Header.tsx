@@ -1,5 +1,5 @@
+import { Film, Heart, Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { Film, Search, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [

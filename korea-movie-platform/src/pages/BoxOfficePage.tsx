@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
+import { format, parse, previousSunday, subDays } from 'date-fns';
 import { useAtom } from 'jotai';
-import { format, subDays, previousSunday, parse } from 'date-fns';
 import { Calendar, TrendingUp } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { kobisApi } from '@/api/kobis';
 import type { DailyBoxOfficeItem } from '@/api/types';
-import { boxOfficeDateAtom, boxOfficeTypeAtom, type BoxOfficeType } from '@/atoms';
-import { MovieCard, MobileMovieCard } from '@/components/movie';
-import { MovieGridSkeleton, ErrorMessage } from '@/components/common';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { type BoxOfficeType, boxOfficeDateAtom, boxOfficeTypeAtom } from '@/atoms';
+import { ErrorMessage, MovieGridSkeleton } from '@/components/common';
+import { MobileMovieCard, MovieCard } from '@/components/movie';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useFavorites } from '@/hooks/useFavorites';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +24,7 @@ export function BoxOfficePage() {
   const dateInputValue = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
   const maxDate = format(subDays(new Date(), 1), 'yyyy-MM-dd');
 
-  const fetchBoxOffice = async () => {
+  const fetchBoxOffice = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -54,11 +54,11 @@ export function BoxOfficePage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [date, type]);
 
   useEffect(() => {
     fetchBoxOffice();
-  }, [date, type]);
+  }, [fetchBoxOffice]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDate = e.target.value.replace(/-/g, '');
@@ -91,9 +91,7 @@ export function BoxOfficePage() {
         </div>
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">{getTitle()}</h1>
-          <p className="text-muted-foreground mt-1">
-            한국 영화 흥행 순위를 확인하세요
-          </p>
+          <p className="text-muted-foreground mt-1">한국 영화 흥행 순위를 확인하세요</p>
         </div>
       </div>
 
@@ -120,19 +118,24 @@ export function BoxOfficePage() {
             </div>
 
             {/* 타입 선택 (데스크톱용 Tabs) */}
-            <Tabs
-              value={type}
-              onValueChange={handleTypeChange}
-              className="hidden sm:block"
-            >
+            <Tabs value={type} onValueChange={handleTypeChange} className="hidden sm:block">
               <TabsList className="bg-gray-100">
-                <TabsTrigger value="daily" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
+                <TabsTrigger
+                  value="daily"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white"
+                >
                   일별
                 </TabsTrigger>
-                <TabsTrigger value="weekly" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
+                <TabsTrigger
+                  value="weekly"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white"
+                >
                   주간
                 </TabsTrigger>
-                <TabsTrigger value="weekend" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white">
+                <TabsTrigger
+                  value="weekend"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white"
+                >
                   주말
                 </TabsTrigger>
               </TabsList>
@@ -174,19 +177,21 @@ export function BoxOfficePage() {
                 movieCd={movie.movieCd}
                 movieNm={movie.movieNm}
                 openDt={movie.openDt}
-                rank={parseInt(movie.rank)}
-                rankInten={parseInt(movie.rankInten)}
+                rank={parseInt(movie.rank, 10)}
+                rankInten={parseInt(movie.rankInten, 10)}
                 rankOldAndNew={movie.rankOldAndNew}
                 audiCnt={movie.audiCnt}
                 audiAcc={movie.audiAcc}
                 gradientIndex={index}
                 showFavoriteButton
                 isFavorite={isFavorite(movie.movieCd)}
-                onFavoriteToggle={() => toggleFavorite({
-                  movieCd: movie.movieCd,
-                  movieNm: movie.movieNm,
-                  openDt: movie.openDt,
-                })}
+                onFavoriteToggle={() =>
+                  toggleFavorite({
+                    movieCd: movie.movieCd,
+                    movieNm: movie.movieNm,
+                    openDt: movie.openDt,
+                  })
+                }
               />
             ))}
           </div>
@@ -199,11 +204,13 @@ export function BoxOfficePage() {
                 movie={movie}
                 gradientIndex={index}
                 isFavorite={isFavorite(movie.movieCd)}
-                onFavoriteToggle={() => toggleFavorite({
-                  movieCd: movie.movieCd,
-                  movieNm: movie.movieNm,
-                  openDt: movie.openDt,
-                })}
+                onFavoriteToggle={() =>
+                  toggleFavorite({
+                    movieCd: movie.movieCd,
+                    movieNm: movie.movieNm,
+                    openDt: movie.openDt,
+                  })
+                }
               />
             ))}
           </div>

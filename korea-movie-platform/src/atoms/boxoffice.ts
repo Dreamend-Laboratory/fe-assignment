@@ -1,5 +1,5 @@
-import { atom } from 'jotai';
 import { format, subDays } from 'date-fns';
+import { atom } from 'jotai';
 
 export type BoxOfficeType = 'daily' | 'weekly' | 'weekend';
 

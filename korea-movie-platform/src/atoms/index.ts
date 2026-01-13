@@ -1,11 +1,10 @@
 export {
-  favoritesAtom,
-  favoritesCountAtom,
-  favoriteGenresAtom,
-} from './favorites';
-
-export {
+  type BoxOfficeType,
   boxOfficeDateAtom,
   boxOfficeTypeAtom,
-  type BoxOfficeType,
 } from './boxoffice';
+export {
+  favoriteGenresAtom,
+  favoritesAtom,
+  favoritesCountAtom,
+} from './favorites';

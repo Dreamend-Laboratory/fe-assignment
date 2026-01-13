@@ -1,14 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Star, ChevronRight, Clock, Calendar, Users, Building2, Clapperboard, Globe, Share2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Building2,
+  Calendar,
+  ChevronRight,
+  Clapperboard,
+  Clock,
+  Globe,
+  Share2,
+  Star,
+  Users,
+} from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { kobisApi } from '@/api/kobis';
 import type { MovieDetail } from '@/api/types';
-import { useFavorites } from '@/hooks/useFavorites';
-import { Loading, ErrorMessage } from '@/components/common';
-import { Button } from '@/components/ui/button';
+import { ErrorMessage, Loading } from '@/components/common';
 import { Badge } from '@/components/ui/badge';
-import { cn, formatDate } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useFavorites } from '@/hooks/useFavorites';
 import { getGradient } from '@/lib/gradients';
+import { cn, formatDate } from '@/lib/utils';
 
 export function MovieDetailPage() {
   const { movieCd } = useParams<{ movieCd: string }>();
@@ -21,7 +32,7 @@ export function MovieDetailPage() {
 
   const isMovieFavorite = movieCd ? isFavorite(movieCd) : false;
 
-  const fetchMovie = async () => {
+  const fetchMovie = useCallback(async () => {
     if (!movieCd) return;
 
     setIsLoading(true);
@@ -36,11 +47,11 @@ export function MovieDetailPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [movieCd]);
 
   useEffect(() => {
     fetchMovie();
-  }, [movieCd]);
+  }, [fetchMovie]);
 
   const handleFavoriteClick = () => {
     if (!movie) return;
@@ -63,7 +74,7 @@ export function MovieDetailPage() {
           title: movie?.movieNm,
           url: window.location.href,
         });
-      } catch (err) {
+      } catch (_err) {
         // 사용자가 공유를 취소한 경우
       }
     } else {
@@ -109,7 +120,10 @@ export function MovieDetailPage() {
             홈
           </Link>
           <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
-          <Link to="/search" className="text-muted-foreground hover:text-indigo-600 transition-colors">
+          <Link
+            to="/search"
+            className="text-muted-foreground hover:text-indigo-600 transition-colors"
+          >
             영화 검색
           </Link>
           <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
@@ -152,9 +166,12 @@ export function MovieDetailPage() {
             >
               {/* 패턴 오버레이 */}
               <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                }} />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                  }}
+                />
               </div>
 
               {/* 어두운 오버레이 */}
@@ -163,8 +180,10 @@ export function MovieDetailPage() {
               {/* 제목 */}
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
                 <div className="w-16 h-0.5 bg-white/40 rounded-full mb-6" />
-                <span className="text-white text-2xl md:text-3xl font-bold text-center leading-tight"
-                      style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3)' }}>
+                <span
+                  className="text-white text-2xl md:text-3xl font-bold text-center leading-tight"
+                  style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3)' }}
+                >
                   {movie.movieNm}
                 </span>
                 <div className="w-16 h-0.5 bg-white/40 rounded-full mt-6" />
@@ -193,9 +212,7 @@ export function MovieDetailPage() {
                     : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
                 )}
               >
-                <Star
-                  className={cn('h-5 w-5 mr-2', isMovieFavorite && 'fill-current')}
-                />
+                <Star className={cn('h-5 w-5 mr-2', isMovieFavorite && 'fill-current')} />
                 {isMovieFavorite ? '즐겨찾기됨' : '즐겨찾기'}
               </Button>
               <Button
@@ -254,11 +271,7 @@ export function MovieDetailPage() {
                 label="감독"
                 value={directors}
               />
-              <InfoItem
-                icon={<Globe className="h-4 w-4" />}
-                label="제작국가"
-                value={nations}
-              />
+              <InfoItem icon={<Globe className="h-4 w-4" />} label="제작국가" value={nations} />
               <InfoItem
                 icon={<Building2 className="h-4 w-4" />}
                 label="배급사"
@@ -284,9 +297,7 @@ export function MovieDetailPage() {
                 : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
             )}
           >
-            <Star
-              className={cn('h-5 w-5 mr-2', isMovieFavorite && 'fill-current')}
-            />
+            <Star className={cn('h-5 w-5 mr-2', isMovieFavorite && 'fill-current')} />
             {isMovieFavorite ? '즐겨찾기됨' : '즐겨찾기'}
           </Button>
           <Button
@@ -318,13 +329,9 @@ export function MovieDetailPage() {
                   {actor.peopleNm.charAt(0)}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-sm text-foreground truncate">
-                    {actor.peopleNm}
-                  </p>
+                  <p className="font-semibold text-sm text-foreground truncate">{actor.peopleNm}</p>
                   {actor.cast && (
-                    <p className="text-xs text-muted-foreground truncate">
-                      {actor.cast} 역
-                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{actor.cast} 역</p>
                   )}
                 </div>
               </div>
@@ -336,20 +343,10 @@ export function MovieDetailPage() {
   );
 }
 
-function InfoItem({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
+function InfoItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="p-2 bg-gray-100 rounded-lg text-muted-foreground">
-        {icon}
-      </div>
+      <div className="p-2 bg-gray-100 rounded-lg text-muted-foreground">{icon}</div>
       <div>
         <dt className="text-xs text-muted-foreground uppercase tracking-wide">{label}</dt>
         <dd className="text-foreground font-medium mt-0.5">{value}</dd>

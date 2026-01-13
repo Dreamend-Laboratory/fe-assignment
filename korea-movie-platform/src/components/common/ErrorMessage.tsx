@@ -16,12 +16,7 @@ export function ErrorMessage({
   className,
 }: ErrorMessageProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center py-12 text-center',
-        className
-      )}
-    >
+    <div className={cn('flex flex-col items-center justify-center py-12 text-center', className)}>
       <AlertCircle className="h-12 w-12 text-destructive mb-4" />
       <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
       <p className="text-sm text-muted-foreground max-w-md mb-6">{message}</p>

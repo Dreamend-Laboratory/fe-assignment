@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai';
-import { favoritesAtom, favoritesCountAtom, favoriteGenresAtom } from '@/atoms';
 import type { FavoriteMovie } from '@/api/types';
+import { favoriteGenresAtom, favoritesAtom, favoritesCountAtom } from '@/atoms';
 
 export function useFavorites() {
   const [favorites, setFavorites] = useAtom(favoritesAtom);
@@ -11,10 +11,7 @@ export function useFavorites() {
     const exists = favorites.some((m) => m.movieCd === movie.movieCd);
     if (exists) return;
 
-    setFavorites((prev) => [
-      ...prev,
-      { ...movie, addedAt: new Date().toISOString() },
-    ]);
+    setFavorites((prev) => [...prev, { ...movie, addedAt: new Date().toISOString() }]);
   };
 
   const removeFavorite = (movieCd: string) => {
@@ -30,8 +27,7 @@ export function useFavorites() {
     }
   };
 
-  const isFavorite = (movieCd: string) =>
-    favorites.some((m) => m.movieCd === movieCd);
+  const isFavorite = (movieCd: string) => favorites.some((m) => m.movieCd === movieCd);
 
   const clearAll = () => setFavorites([]);
 

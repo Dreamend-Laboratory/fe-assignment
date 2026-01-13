@@ -1,6 +1,6 @@
+import { type LucideIcon, X } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MobileMenuProps {
@@ -15,7 +15,7 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
   // 라우트 변경 시 메뉴 닫기
   useEffect(() => {
     onClose();
-  }, [location.pathname, onClose]);
+  }, [onClose]);
 
   // body 스크롤 방지
   useEffect(() => {

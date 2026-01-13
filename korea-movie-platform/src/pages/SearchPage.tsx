@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { Filter, Search, Sparkles } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, Sparkles } from 'lucide-react';
 import { kobisApi } from '@/api/kobis';
 import type { MovieListItem } from '@/api/types';
+import { EmptyState, ErrorMessage, MovieGridSkeleton } from '@/components/common';
 import { MovieCard } from '@/components/movie';
-import { MovieGridSkeleton, ErrorMessage, EmptyState } from '@/components/common';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -39,7 +39,7 @@ export function SearchPage() {
   const [year, setYear] = useState(searchParams.get('year') || 'all');
   const [movieType, setMovieType] = useState(searchParams.get('type') || 'all');
   const [nation, setNation] = useState(searchParams.get('nation') || 'all');
-  const [page, setPage] = useState(parseInt(searchParams.get('page') || '1'));
+  const [page, setPage] = useState(parseInt(searchParams.get('page') || '1', 10));
 
   const [movies, setMovies] = useState<MovieListItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -50,68 +50,72 @@ export function SearchPage() {
   const itemsPerPage = 10;
   const totalPages = Math.ceil(totalCount / itemsPerPage);
 
-  const searchMovies = async (resetPage = false) => {
-    const searchPage = resetPage ? 1 : page;
+  const searchMovies = useCallback(
+    async (resetPage = false) => {
+      const searchPage = resetPage ? 1 : page;
 
-    // 검색어가 없으면 검색하지 않음
-    if (!query.trim()) {
-      setMovies([]);
-      setTotalCount(0);
-      setHasSearched(false);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    setHasSearched(true);
-
-    try {
-      const { movies: results, totalCount: count } = await kobisApi.searchMovies({
-        movieNm: query.trim(),
-        prdtStartYear: year !== 'all' ? year : undefined,
-        prdtEndYear: year !== 'all' ? year : undefined,
-        movieTypeCd: movieType !== 'all' ? movieType : undefined,
-        repNationCd: nation !== 'all' ? nation : undefined,
-        curPage: searchPage,
-        itemPerPage: itemsPerPage,
-      });
-
-      setMovies(results);
-      setTotalCount(count);
-
-      if (resetPage) {
-        setPage(1);
+      // 검색어가 없으면 검색하지 않음
+      if (!query.trim()) {
+        setMovies([]);
+        setTotalCount(0);
+        setHasSearched(false);
+        return;
       }
 
-      // URL 파라미터 업데이트
-      const params = new URLSearchParams();
-      if (query) params.set('q', query);
-      if (year && year !== 'all') params.set('year', year);
-      if (movieType && movieType !== 'all') params.set('type', movieType);
-      if (nation && nation !== 'all') params.set('nation', nation);
-      params.set('page', searchPage.toString());
-      setSearchParams(params, { replace: true });
-    } catch (err) {
-      console.error('영화 검색 실패:', err);
-      setError('영화 검색에 실패했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      setIsLoading(true);
+      setError(null);
+      setHasSearched(true);
+
+      try {
+        const { movies: results, totalCount: count } = await kobisApi.searchMovies({
+          movieNm: query.trim(),
+          prdtStartYear: year !== 'all' ? year : undefined,
+          prdtEndYear: year !== 'all' ? year : undefined,
+          movieTypeCd: movieType !== 'all' ? movieType : undefined,
+          repNationCd: nation !== 'all' ? nation : undefined,
+          curPage: searchPage,
+          itemPerPage: itemsPerPage,
+        });
+
+        setMovies(results);
+        setTotalCount(count);
+
+        if (resetPage) {
+          setPage(1);
+        }
+
+        // URL 파라미터 업데이트
+        const params = new URLSearchParams();
+        if (query) params.set('q', query);
+        if (year && year !== 'all') params.set('year', year);
+        if (movieType && movieType !== 'all') params.set('type', movieType);
+        if (nation && nation !== 'all') params.set('nation', nation);
+        params.set('page', searchPage.toString());
+        setSearchParams(params, { replace: true });
+      } catch (err) {
+        console.error('영화 검색 실패:', err);
+        setError('영화 검색에 실패했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [page, query, year, movieType, nation, setSearchParams]
+  );
 
   // 초기 로드 시 URL 파라미터로 검색
   useEffect(() => {
-    if (searchParams.get('q')) {
+    const queryParam = searchParams.get('q');
+    if (queryParam) {
       searchMovies();
     }
-  }, []);
+  }, [searchMovies, searchParams]);
 
   // 페이지 변경 시 검색
   useEffect(() => {
     if (hasSearched) {
       searchMovies();
     }
-  }, [page]);
+  }, [hasSearched, searchMovies]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,9 +136,7 @@ export function SearchPage() {
         </div>
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">영화 검색</h1>
-          <p className="text-muted-foreground mt-1">
-            원하는 영화를 검색해보세요
-          </p>
+          <p className="text-muted-foreground mt-1">원하는 영화를 검색해보세요</p>
         </div>
       </div>
 
@@ -287,10 +289,7 @@ function Pagination({
   );
   const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-  const pages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
-  );
+  const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   // 모바일용 페이지 목록 (3개만)
   const mobileStartPage = Math.max(
@@ -337,9 +336,11 @@ function Pagination({
             variant={pageNum === currentPage ? 'default' : 'outline'}
             size="sm"
             onClick={() => onPageChange(pageNum)}
-            className={pageNum === currentPage
-              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
-              : 'rounded-lg'}
+            className={
+              pageNum === currentPage
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
+                : 'rounded-lg'
+            }
           >
             {pageNum}
           </Button>
@@ -368,9 +369,11 @@ function Pagination({
             variant={pageNum === currentPage ? 'default' : 'outline'}
             size="sm"
             onClick={() => onPageChange(pageNum)}
-            className={`w-8 h-8 p-0 text-xs ${pageNum === currentPage
-              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
-              : 'rounded-lg'}`}
+            className={`w-8 h-8 p-0 text-xs ${
+              pageNum === currentPage
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-0 rounded-lg'
+                : 'rounded-lg'
+            }`}
           >
             {pageNum}
           </Button>
