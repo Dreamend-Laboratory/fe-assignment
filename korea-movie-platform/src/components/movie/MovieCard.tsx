@@ -3,6 +3,7 @@ import { X, Star, Film } from 'lucide-react';
 import { cn, formatAudience } from '@/lib/utils';
 import { getGradient, getGradientByIndex } from '@/lib/gradients';
 import { RankBadge } from './RankBadge';
+import { FavoriteButton } from './FavoriteButton';
 
 interface MovieCardProps {
   movieCd: string;
@@ -11,17 +12,24 @@ interface MovieCardProps {
   prdtYear?: string;
   openDt?: string;
   directors?: string;
+  
   // 박스오피스용
   rank?: number;
   rankInten?: number;
   rankOldAndNew?: 'OLD' | 'NEW';
   audiCnt?: string;
   audiAcc?: string;
+
   // 즐겨찾기 페이지용
   showFavoriteBadge?: boolean;
   showDeleteButton?: boolean;
   addedAt?: string;
   onDelete?: () => void;
+
+  showFavoriteButton?: boolean;
+  isFavorite?: boolean;
+  onFavoriteToggle?: () => void;
+
   // 스타일링
   gradientIndex?: number;
   className?: string;
@@ -41,6 +49,9 @@ export function MovieCard({
   showDeleteButton,
   addedAt,
   onDelete,
+  showFavoriteButton,
+  isFavorite,
+  onFavoriteToggle,
   gradientIndex,
   className,
 }: MovieCardProps) {
@@ -53,6 +64,12 @@ export function MovieCard({
     e.preventDefault();
     e.stopPropagation();
     onDelete?.();
+  };
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onFavoriteToggle?.();
   };
 
   return (
@@ -141,6 +158,18 @@ export function MovieCard({
             >
               <X className="h-4 w-4" />
             </button>
+          )}
+
+          {/* 즐겨찾기 버튼 (우상단) */}
+          {showFavoriteButton && (
+            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
+              <FavoriteButton
+                isFavorite={isFavorite ?? false}
+                onClick={handleFavoriteClick}
+                size="sm"
+                className="bg-white/90 backdrop-blur-sm shadow-md hover:bg-white"
+              />
+            </div>
           )}
 
         </div>

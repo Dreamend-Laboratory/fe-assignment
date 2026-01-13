@@ -94,18 +94,28 @@ export function MovieDetailPage() {
 
   return (
     <div className="space-y-8">
-      {/* 브레드크럼 (데스크톱) */}
-      <nav className="hidden md:flex items-center gap-2 text-sm">
-        <Link to="/" className="text-muted-foreground hover:text-indigo-600 transition-colors">
-          홈
-        </Link>
-        <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
-        <Link to="/search" className="text-muted-foreground hover:text-indigo-600 transition-colors">
-          영화 검색
-        </Link>
-        <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
-        <span className="text-foreground font-medium">{movie.movieNm}</span>
-      </nav>
+      {/* 뒤로가기 + 브레드크럼 (데스크톱) */}
+      <div className="hidden md:flex items-center gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-gray-100 rounded-xl transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          뒤로가기
+        </button>
+        <div className="h-4 w-px bg-gray-200" />
+        <nav className="flex items-center gap-2 text-sm">
+          <Link to="/" className="text-muted-foreground hover:text-indigo-600 transition-colors">
+            홈
+          </Link>
+          <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+          <Link to="/search" className="text-muted-foreground hover:text-indigo-600 transition-colors">
+            영화 검색
+          </Link>
+          <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+          <span className="text-foreground font-medium">{movie.movieNm}</span>
+        </nav>
+      </div>
 
       {/* 모바일 헤더 */}
       <div className="md:hidden flex items-center justify-between -mt-4 mb-4">
