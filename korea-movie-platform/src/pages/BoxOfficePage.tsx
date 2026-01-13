@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { format, subDays, previousSunday, parse } from 'date-fns';
-import { Calendar, TrendingUp } from 'lucide-react';
+import { Calendar, TrendingUp, Star } from 'lucide-react';
 import { kobisApi } from '@/api/kobis';
 import type { DailyBoxOfficeItem } from '@/api/types';
 import { boxOfficeDateAtom, boxOfficeTypeAtom, type BoxOfficeType } from '@/atoms';
@@ -9,13 +9,7 @@ import { MovieCard } from '@/components/movie';
 import { MovieGridSkeleton, ErrorMessage } from '@/components/common';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { useFavorites } from '@/hooks/useFavorites';
 import { formatDateWithSpaces } from '@/lib/utils';
 import { getGradientByIndex } from '@/lib/gradients';
 import { cn } from '@/lib/utils';
@@ -26,6 +20,7 @@ export function BoxOfficePage() {
   const [movies, setMovies] = useState<DailyBoxOfficeItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   // 날짜 입력 형식 변환 (YYYYMMDD <-> YYYY-MM-DD)
   const dateInputValue = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
@@ -187,6 +182,13 @@ export function BoxOfficePage() {
                 audiCnt={movie.audiCnt}
                 audiAcc={movie.audiAcc}
                 gradientIndex={index}
+                showFavoriteButton
+                isFavorite={isFavorite(movie.movieCd)}
+                onFavoriteToggle={() => toggleFavorite({
+                  movieCd: movie.movieCd,
+                  movieNm: movie.movieNm,
+                  openDt: movie.openDt,
+                })}
               />
             ))}
           </div>
@@ -198,6 +200,12 @@ export function BoxOfficePage() {
                 key={movie.movieCd}
                 movie={movie}
                 gradientIndex={index}
+                isFavorite={isFavorite(movie.movieCd)}
+                onFavoriteToggle={() => toggleFavorite({
+                  movieCd: movie.movieCd,
+                  movieNm: movie.movieNm,
+                  openDt: movie.openDt,
+                })}
               />
             ))}
           </div>
@@ -211,10 +219,20 @@ export function BoxOfficePage() {
 function MobileMovieCard({
   movie,
   gradientIndex,
+  isFavorite,
+  onFavoriteToggle,
 }: {
   movie: DailyBoxOfficeItem;
   gradientIndex: number;
+  isFavorite: boolean;
+  onFavoriteToggle: () => void;
 }) {
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onFavoriteToggle();
+  };
+
   return (
     <a
       href={`/movie/${movie.movieCd}`}
@@ -265,6 +283,22 @@ function MobileMovieCard({
           </span>
         </div>
       </div>
+
+      {/* 즐겨찾기 버튼 */}
+      <button
+        onClick={handleFavoriteClick}
+        className="self-center w-10 h-10 flex items-center justify-center rounded-xl transition-all active:scale-95"
+        aria-label={isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+      >
+        <Star
+          className={cn(
+            'h-5 w-5 transition-colors',
+            isFavorite
+              ? 'fill-amber-400 text-amber-400'
+              : 'text-gray-300'
+          )}
+        />
+      </button>
     </a>
   );
 }
