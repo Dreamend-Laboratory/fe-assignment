@@ -24,16 +24,20 @@ export const formatAudience = (count: string): string => {
  * 날짜 포맷팅 (YYYYMMDD -> YYYY.MM.DD)
  */
 export const formatDate = (dateStr: string): string => {
-  if (!dateStr || dateStr.length < 8) return dateStr;
-  return `${dateStr.slice(0, 4)}.${dateStr.slice(4, 6)}.${dateStr.slice(6, 8)}`;
+  if (!dateStr) return dateStr;
+  const cleaned = dateStr.replace(/-/g, '');
+  if (cleaned.length < 8) return dateStr;
+  return `${cleaned.slice(0, 4)}.${cleaned.slice(4, 6)}.${cleaned.slice(6, 8)}`;
 };
 
 /**
  * 날짜 포맷팅 (YYYYMMDD -> YYYY. MM. DD.)
  */
 export const formatDateWithSpaces = (dateStr: string): string => {
-  if (!dateStr || dateStr.length < 8) return dateStr;
-  return `${dateStr.slice(0, 4)}. ${dateStr.slice(4, 6)}. ${dateStr.slice(6, 8)}.`;
+  if (!dateStr) return dateStr;
+  const cleaned = dateStr.replace(/-/g, '');
+  if (cleaned.length < 8) return dateStr;
+  return `${cleaned.slice(0, 4)}. ${cleaned.slice(4, 6)}. ${cleaned.slice(6, 8)}.`;
 };
 
 /**
