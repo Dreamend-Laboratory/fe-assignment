@@ -93,7 +93,8 @@ export function FavoritesPage() {
                 genreAlt={movie.genreAlt}
                 prdtYear={movie.prdtYear}
                 addedAt={movie.addedAt}
-                showFavoriteBadge
+                showDeleteButton
+                onDelete={() => removeFavorite(movie.movieCd)}
                 gradientIndex={index}
               />
             ))}
